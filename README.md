@@ -1,59 +1,67 @@
 # X Skill for Muse
 
-Operate your X (Twitter) account from Muse: publish posts, read your home
-timeline and mentions, search recent posts, look up users, and manage likes,
-reposts, bookmarks, and follows — all through the official X API v2.
+Post, read, search, and engage on X (Twitter) from Muse — through the
+official X API v2. One login, then it just works.
 
-## Highlights
+## Connect in 3 steps
 
-- **One-time login, then it just works.** `auth login` walks through X's OAuth
-  2.0 (PKCE) once in your browser. Tokens are stored locally (`~/.x-skill/`,
-  mode 0600) and refresh automatically — no re-login, ever.
-- **Full v1 command set:** `me`, `post` (with `--dry-run` cost preview,
-  replies, quotes), `delete`, `timeline`, `mentions`, `user-tweets`,
-  `search`, `user`, `like`/`unlike`, `repost`/`unrepost`,
-  `bookmark`/`unbookmark`, `follow`/`unfollow`, `followers`/`following`.
-- **Cost-aware.** X bills pay-per-use; every `--dry-run` shows the exact
-  estimated cost before anything is spent. Reads default to 10 items.
-- **Sandbox mode.** `--sandbox` runs every command against a local mock of
-  the X API, so you can test safely with zero spend and zero credentials.
-- **Approval-gated posting.** The skill never posts without your explicit
-  approval of the exact text.
+**1. Create an X app** at [console.x.com](https://console.x.com):
+- New **Project** → new **App** inside it
+- **User authentication settings** → enable **OAuth 2.0**, Type: *Web App*
+- **Callback URI:** `http://localhost:3000/callback`
+- Permissions: **Read and write**
+- Copy the **OAuth 2.0 Client ID** (and Secret) from **Keys and tokens**
+- Add $10–20 prepaid credits under **Billing**
 
-## Requirements
-
-- Python 3.8+
-- An X developer app (free to create; API usage is pay-per-use with prepaid
-  credits — a few posts a day costs ~$1–2/month). See SETUP.md.
-
-## Quick start
-
+**2. Install:**
 ```sh
-# 1. Copy the skill into your Muse workspace
 cp -r x ~/workspace/skills/
-
-# 2. One-time login (opens X in your browser)
-python3 ~/workspace/skills/x/bin/x.py auth login --client-id <your-client-id>
-
-# 3. Post (shows cost first, then asks for your approval in chat)
-python3 ~/workspace/skills/x/bin/x.py post --text "Hello, world" --dry-run
-
-# 4. Try the sandbox (no login, no spend, nothing published)
-python3 ~/workspace/skills/x/bin/x.py --sandbox timeline
 ```
 
-See [SETUP.md](SETUP.md) for the full walkthrough, including creating the X
-app, funding credits, and troubleshooting.
+**3. Connect:**
+```sh
+python3 ~/workspace/skills/x/bin/x.py auth login --client-id <your-client-id>
+```
+Approve in your browser, paste back the code, enter your client secret.
+Done — tokens refresh automatically, forever. Verify with:
+```sh
+python3 ~/workspace/skills/x/bin/x.py me
+```
 
-## Costs (X pay-per-use, Oct 2026 — re-verify in console.x.com)
+## Use it
 
-| Operation | Price |
+```sh
+python3 ~/workspace/skills/x/bin/x.py post --text "Hello" --dry-run  # cost preview
+python3 ~/workspace/skills/x/bin/x.py post --text "Hello"             # publish
+python3 ~/workspace/skills/x/bin/x.py timeline
+python3 ~/workspace/skills/x/bin/x.py mentions
+python3 ~/workspace/skills/x/bin/x.py search --query "AI"
+python3 ~/workspace/skills/x/bin/x.py like --id <post_id>
+```
+
+Every command takes `--json`. Every command also takes `--sandbox` to run
+against a local mock API — no login, no spend, nothing published.
+
+## What it costs
+
+X bills pay-per-use. A few posts a day ≈ **$1–2/month**.
+
+| Action | Cost |
 |---|---|
 | Text post | $0.015 |
-| Post containing a URL | **$0.20** (13x) |
-| Post read | $0.005 |
-| Own data read | $0.001 |
+| Post with a link | **$0.20** |
+| Reading posts | $0.005 each |
+
+## If something breaks
+
+- **X says "Something went wrong" on approve** → the callback URL isn't
+  registered exactly as `http://localhost:3000/callback`, or OAuth 2.0 isn't
+  enabled, or you used the API Key instead of the OAuth 2.0 Client ID.
+- **403 "App must be attached to a Project"** → attach the app to a Project
+  in console.x.com.
+- **401 errors** → the skill auto-refreshes; if it persists, re-run
+  `auth login`.
 
 ## License
 
-MIT — see LICENSE.
+MIT
