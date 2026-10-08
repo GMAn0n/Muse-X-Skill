@@ -1,5 +1,9 @@
 # X Skill for Muse
 
+> **Get it now:** [Download page](https://muse.ai/s/x-skill-for-muse-pv6c1xts59xqv) ·
+> [Live site](https://gman0n.github.io/Muse-X-Skill/) ·
+> [GitHub](https://github.com/GMAn0n/Muse-X-Skill)
+
 Post, read, search, and engage on X (Twitter) from Muse — through the
 official X API v2. One login, then it just works.
 

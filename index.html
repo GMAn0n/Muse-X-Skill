@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>X Skill for Muse — Post, read &amp; engage on X from Muse</title>
+<meta name="description" content="X Skill for Muse is a free, MIT-licensed CLI that operates your X (Twitter) account through the official X API v2. Post, read timelines and mentions, search, and manage engagement from Muse. One-time OAuth login, auto-refreshing tokens, sandbox test mode.">
+<link rel="canonical" href="https://gman0n.github.io/Muse-X-Skill/">
+<meta name="robots" content="index, follow">
+<!-- Google Search Console verification: paste the <meta name="google-site-verification" ...> tag here once provided -->
+<meta property="og:title" content="X Skill for Muse — Post, read &amp; engage on X from Muse">
+<meta property="og:description" content="Free, MIT-licensed CLI that operates your X (Twitter) account through the official X API v2. One-time OAuth login, auto-refreshing tokens, sandbox test mode.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://gman0n.github.io/Muse-X-Skill/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="X Skill for Muse — Post, read &amp; engage on X from Muse">
+<meta name="twitter:description" content="Free, MIT-licensed CLI that operates your X (Twitter) account through the official X API v2. One-time OAuth login, auto-refreshing tokens.">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "X Skill for Muse",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Any (Python 3.8+)",
+  "description": "X Skill for Muse is a free, MIT-licensed command-line tool that operates an X (Twitter) account through the official X API v2. It lets Muse publish posts, read the home timeline and mentions, search recent posts, look up users, and manage likes, reposts, bookmarks, and follows. Setup takes three steps and about five minutes: create an X developer app, install the skill, and run a one-time OAuth login. Tokens refresh automatically. Text posts cost $0.015; posts containing URLs cost $0.20.",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "license": "https://opensource.org/licenses/MIT",
+  "author": { "@type": "Person", "name": "GMAn0n" },
+  "codeRepository": "https://github.com/GMAn0n/Muse-X-Skill",
+  "featureList": [
+    "Publish posts to X, including replies and quote posts, with a dry-run cost preview",
+    "Read your home timeline",
+    "Read your mentions",
+    "Search recent posts across X",
+    "Look up any user by handle",
+    "Like and unlike posts",
+    "Repost and unrepost posts",
+    "Bookmark and unbookmark posts",
+    "Follow and unfollow users, list followers and following",
+    "One-time OAuth 2.0 login with automatically refreshing tokens",
+    "Sandbox mode that runs every command against a local mock API with zero spend"
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How do I connect my X account to the X Skill for Muse?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Three steps, about five minutes. First, create an X developer app at console.x.com with OAuth 2.0 enabled, the callback URI http://localhost:3000/callback, and Read and write permissions. Second, copy the skill into your Muse workspace with: cp -r x ~/workspace/skills/. Third, run: python3 ~/workspace/skills/x/bin/x.py auth login --client-id <your-client-id>, approve the app in your browser, and paste back the code. Your tokens refresh automatically from then on." }
+    },
+    {
+      "@type": "Question",
+      "name": "How much does the X API cost when using this skill?",
+      "acceptedAnswer": { "@type": "Answer", "text": "X bills pay-per-use. A text post costs $0.015. A post containing a URL costs $0.20. Reading a post costs $0.005. A few posts a day works out to roughly $1–2 per month. Every post command supports --dry-run, which shows the exact estimated cost before anything is spent." }
+    },
+    {
+      "@type": "Question",
+      "name": "Do I need to log in every time I use the X skill?",
+      "acceptedAnswer": { "@type": "Answer", "text": "No. You log in exactly once with the auth login command. Your access and refresh tokens are stored locally with restricted file permissions and refresh automatically, so the skill keeps working indefinitely without another login." }
+    },
+    {
+      "@type": "Question",
+      "name": "Is there a safe test mode for the X skill?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Yes. Every command accepts a --sandbox flag that routes the call to a local mock of the X API. Sandbox mode needs no login, spends nothing, and publishes nothing, so you can exercise the full command set safely." }
+    },
+    {
+      "@type": "Question",
+      "name": "What can the X Skill for Muse do?",
+      "acceptedAnswer": { "@type": "Answer", "text": "It publishes posts (with replies, quotes, and a dry-run cost preview), reads your home timeline and mentions, searches recent posts, looks up users, and manages likes, reposts, bookmarks, and follows — all through the official X API v2, driven from Muse." }
+    },
+    {
+      "@type": "Question",
+      "name": "Is the X Skill for Muse free?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Yes. The skill itself is free and MIT-licensed. You only pay X's own pay-per-use API fees, which run about $1–2 per month for a few posts a day." }
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://gman0n.github.io/Muse-X-Skill/" },
+    { "@type": "ListItem", "position": 2, "name": "X Skill for Muse", "item": "https://gman0n.github.io/Muse-X-Skill/" }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "How to connect the X Skill for Muse to your X account",
+  "description": "Connect the X Skill for Muse in three steps, about five minutes.",
+  "totalTime": "PT5M",
+  "step": [
+    {
+      "@type": "HowToStep",
+      "name": "Create an X developer app",
+      "text": "At console.x.com, create a Project and an App inside it. In the app's User authentication settings, enable OAuth 2.0 (Web App), set the callback URI to http://localhost:3000/callback, grant Read and write permissions, then copy the OAuth 2.0 Client ID and Secret from Keys and tokens. Add $10–20 of prepaid credits under Billing."
+    },
+    {
+      "@type": "HowToStep",
+      "name": "Install the skill",
+      "text": "Copy the skill into your Muse workspace: cp -r x ~/workspace/skills/"
+    },
+    {
+      "@type": "HowToStep",
+      "name": "Log in once",
+      "text": "Run: python3 ~/workspace/skills/x/bin/x.py auth login --client-id <your-client-id>. Approve the app in your browser, paste back the code, and enter your client secret. Tokens refresh automatically from then on. Verify with: python3 ~/workspace/skills/x/bin/x.py me"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "X Skill for Muse — Post, read & engage on X from Muse",
+  "url": "https://gman0n.github.io/Muse-X-Skill/",
+  "description": "Free, MIT-licensed CLI that operates your X (Twitter) account through the official X API v2.",
+  "speakable": {
+    "@type": "SpeakableSpecification",
+    "cssSelector": [".lede", ".connect-steps"]
+  }
+}
+</script>
+<style>
+:root{--bg:#0b0e14;--card:#12161f;--border:#232a3a;--text:#e8ecf4;--muted:#9aa4b8;--accent:#1d9bf0;--accent-d:#0f7cc4;--green:#2fbf71}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.65;font-size:17px}
+.wrap{max-width:880px;margin:0 auto;padding:0 22px}
+header.hero{padding:84px 0 60px;text-align:center;border-bottom:1px solid var(--border)}
+.badge{display:inline-block;background:#14202e;border:1px solid var(--border);color:var(--accent);font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:6px 14px;border-radius:999px;margin-bottom:22px}
+h1{font-size:clamp(2rem,5vw,3.2rem);line-height:1.15;letter-spacing:-.02em;margin-bottom:18px}
+h1 .x{color:var(--accent)}
+.lede{font-size:1.15rem;color:var(--muted);max-width:640px;margin:0 auto 34px}
+.cta-row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:20px}
+.btn{display:inline-block;padding:14px 30px;border-radius:10px;font-weight:700;font-size:1rem;text-decoration:none;transition:transform .12s ease,box-shadow .12s ease}
+.btn:hover{transform:translateY(-2px)}
+.btn-primary{background:var(--accent);color:#fff;box-shadow:0 6px 24px rgba(29,155,240,.35)}
+.btn-primary:hover{background:var(--accent-d)}
+.btn-ghost{background:transparent;color:var(--text);border:1px solid var(--border)}
+.btn-ghost:hover{border-color:var(--accent)}
+.sub-links{font-size:.9rem;color:var(--muted)}
+.sub-links a{color:var(--accent);text-decoration:none}
+.sub-links a:hover{text-decoration:underline}
+main section{padding:56px 0;border-bottom:1px solid var(--border)}
+h2{font-size:1.7rem;letter-spacing:-.01em;margin-bottom:10px}
+.section-sub{color:var(--muted);margin-bottom:28px;max-width:640px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:22px}
+.card h3{font-size:1.05rem;margin-bottom:8px;color:var(--accent)}
+.card p{font-size:.95rem;color:var(--muted)}
+.steps{counter-reset:step;display:flex;flex-direction:column;gap:18px;margin-top:8px}
+.step{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px;position:relative;padding-left:72px}
+.step::before{counter-increment:step;content:counter(step);position:absolute;left:24px;top:24px;width:32px;height:32px;border-radius:50%;background:var(--accent);color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center}
+.step h3{margin-bottom:10px}
+.step p,.step li{color:var(--muted);font-size:.96rem}
+.step ul{margin:10px 0 0 18px}
+pre{background:#080b10;border:1px solid var(--border);border-radius:10px;padding:16px 18px;overflow-x:auto;margin:14px 0;font-size:.88rem;line-height:1.6;position:relative}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:#c9f2d8}
+.copy{position:absolute;top:10px;right:10px;background:#1a2230;border:1px solid var(--border);color:var(--muted);font-size:.75rem;padding:5px 12px;border-radius:6px;cursor:pointer}
+.copy:hover{color:#fff;border-color:var(--accent)}
+table{width:100%;border-collapse:collapse;margin-top:14px;font-size:.96rem}
+th,td{text-align:left;padding:12px 14px;border-bottom:1px solid var(--border)}
+th{color:var(--muted);font-weight:600;font-size:.85rem;text-transform:uppercase;letter-spacing:.05em}
+td:last-child{font-weight:700;color:var(--green);white-space:nowrap}
+.faq-item{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px 22px;margin-bottom:12px}
+.faq-item h3{font-size:1.02rem;margin-bottom:8px}
+.faq-item p{color:var(--muted);font-size:.95rem}
+footer{padding:44px 0 60px;text-align:center;color:var(--muted);font-size:.9rem}
+footer a{color:var(--accent);text-decoration:none;margin:0 10px}
+footer a:hover{text-decoration:underline}
+@media(max-width:600px){.step{padding-left:24px;padding-top:64px}.step::before{left:24px;top:18px}header.hero{padding:60px 0 44px}}
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <span class="badge">Free &amp; open source &middot; MIT licensed</span>
+    <h1><span class="x">X</span> Skill for Muse</h1>
+    <p class="lede">The X Skill for Muse is a free, MIT-licensed command-line tool that operates an X (Twitter) account through the official X API v2. Post to X from Muse, read your timeline and mentions, search recent posts, and manage engagement — all from chat. Setup takes three steps and about five minutes: create an X developer app, install the skill, and run a one-time OAuth login with automatically refreshing tokens. Text posts cost $0.015; posts containing URLs cost $0.20.</p>
+    <div class="cta-row">
+      <a class="btn btn-primary" href="#connect">Connect your X account</a>
+      <a class="btn btn-ghost" href="https://muse.ai/s/x-skill-for-muse-pv6c1xts59xqv">Download</a>
+    </div>
+    <p class="sub-links"><a href="https://github.com/GMAn0n/Muse-X-Skill">GitHub repo</a> &middot; Python 3.8+, no other dependencies</p>
+  </div>
+</header>
+
+<main>
+  <section aria-labelledby="features">
+    <div class="wrap">
+      <h2 id="features">What you can do</h2>
+      <p class="section-sub">Full X API v2 coverage for your Muse X integration — every command works from chat, returns JSON on request, and previews costs before spending.</p>
+      <div class="grid">
+        <article class="card"><h3>Publish posts</h3><p>Post to X from Muse with a single command, including replies and quote posts. Every post supports <code>--dry-run</code>, which shows the exact cost before anything is published — no surprise charges, ever.</p></article>
+        <article class="card"><h3>Read your timeline</h3><p>Pull your home timeline straight into the conversation so Muse can brief you on what's happening, summarize threads, or find posts worth engaging with — all through the official X API v2.</p></article>
+        <article class="card"><h3>Read mentions</h3><p>See who's talking to you without opening the app. Muse can triage your mentions, draft replies for your approval, and keep you responsive while you focus on real work.</p></article>
+        <article class="card"><h3>Search X</h3><p>Search recent posts across X by keyword, from Muse. Track topics, monitor competitors, or find conversations to join — with results you can act on immediately.</p></article>
+        <article class="card"><h3>Engage: likes, reposts, follows</h3><p>Like, repost, bookmark, follow, and unfollow without leaving chat. Automate X posts and engagement workflows while keeping a human in the loop for every consequential action.</p></article>
+        <article class="card"><h3>User lookup</h3><p>Look up any X user by handle — profile, bio, follower counts — so Muse can research accounts, verify identities, and give you context before you engage.</p></article>
+        <article class="card"><h3>Direct messages</h3><p>Read and send DMs through the X API v2 DM endpoints. Announce launches in group chats, follow up with contacts, and keep conversations moving from the same chat interface.</p></article>
+        <article class="card"><h3>Auto-refreshing OAuth</h3><p>Log in exactly once. Your OAuth 2.0 tokens are stored locally with restricted permissions and refresh automatically in the background — the Twitter API integration just keeps working.</p></article>
+        <article class="card"><h3>Sandbox test mode</h3><p>Every command accepts <code>--sandbox</code>, routing it to a local mock of the X API. Test the full skill with no login, no spend, and nothing published — perfect for trying before you connect.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="connect" id="connect">
+    <div class="wrap">
+      <h2 id="connect-h">Connect in 3 steps</h2>
+      <p class="section-sub connect-steps">About five minutes, once. After that, the skill runs your X account from Muse indefinitely.</p>
+      <div class="steps">
+        <article class="step">
+          <h3>Create an X developer app</h3>
+          <p>At <a href="https://console.x.com" style="color:var(--accent)">console.x.com</a>:</p>
+          <ul>
+            <li>Create a <strong>Project</strong>, then an <strong>App</strong> inside it</li>
+            <li><strong>User authentication settings</strong> → enable <strong>OAuth 2.0</strong>, type <em>Web App</em></li>
+            <li><strong>Callback URI:</strong> <code>http://localhost:3000/callback</code></li>
+            <li>Permissions: <strong>Read and write</strong> (add DM scopes for direct messages)</li>
+            <li>Copy the <strong>OAuth 2.0 Client ID</strong> and Secret from <strong>Keys and tokens</strong></li>
+            <li>Add $10–20 prepaid credits under <strong>Billing</strong></li>
+          </ul>
+        </article>
+        <article class="step">
+          <h3>Install the skill</h3>
+          <pre><button class="copy" onclick="navigator.clipboard.writeText(this.nextElementSibling.innerText);this.innerText='Copied'">Copy</button><code>cp -r x ~/workspace/skills/</code></pre>
+        </article>
+        <article class="step">
+          <h3>Log in once</h3>
+          <pre><button class="copy" onclick="navigator.clipboard.writeText(this.nextElementSibling.innerText);this.innerText='Copied'">Copy</button><code>python3 ~/workspace/skills/x/bin/x.py auth login --client-id &lt;your-client-id&gt;</code></pre>
+          <p>Approve the app in your browser, paste back the code, and enter your client secret. Done — tokens refresh automatically, forever. Verify with:</p>
+          <pre><button class="copy" onclick="navigator.clipboard.writeText(this.nextElementSibling.innerText);this.innerText='Copied'">Copy</button><code>python3 ~/workspace/skills/x/bin/x.py me</code></pre>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="costs">
+    <div class="wrap">
+      <h2 id="costs">What it costs</h2>
+      <p class="section-sub">X bills pay-per-use. A few posts a day works out to roughly <strong>$1–2/month</strong>. The skill itself is free.</p>
+      <table>
+        <thead><tr><th>Action</th><th>Cost</th></tr></thead>
+        <tbody>
+          <tr><td>Text post</td><td>$0.015</td></tr>
+          <tr><td>Post containing a URL</td><td>$0.20</td></tr>
+          <tr><td>Reading posts</td><td>$0.005 each</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section aria-labelledby="faq">
+    <div class="wrap">
+      <h2 id="faq">Frequently asked questions</h2>
+      <p class="section-sub">Everything you need to know about the X Skill for Muse.</p>
+      <div class="faq-item"><h3>How do I connect my X account?</h3><p>Three steps, about five minutes: create an X developer app at console.x.com with OAuth 2.0 and the callback <code>http://localhost:3000/callback</code>, install the skill with <code>cp -r x ~/workspace/skills/</code>, then run <code>auth login --client-id</code> and approve in your browser. See the Connect section above for the full walkthrough.</p></div>
+      <div class="faq-item"><h3>How much does the X API cost?</h3><p>X bills pay-per-use: $0.015 per text post, $0.20 per post containing a URL, $0.005 per post read. A few posts a day is roughly $1–2/month. The <code>--dry-run</code> flag shows the exact cost before anything is spent.</p></div>
+      <div class="faq-item"><h3>Do I need to log in every time?</h3><p>No — you log in exactly once. Tokens are stored locally with restricted file permissions and refresh automatically, so the skill keeps working indefinitely.</p></div>
+      <div class="faq-item"><h3>Is there a safe test mode?</h3><p>Yes. Every command accepts <code>--sandbox</code>, which routes it to a local mock of the X API. No login, no spend, nothing published — exercise the full command set safely.</p></div>
+      <div class="faq-item"><h3>What can the skill do?</h3><p>Publish posts (replies, quotes, dry-run previews), read your home timeline and mentions, search recent posts, look up users, manage likes, reposts, bookmarks, and follows, and read/send DMs — all through the official X API v2.</p></div>
+      <div class="faq-item"><h3>Is the X Skill for Muse free?</h3><p>Yes — the skill is free and MIT-licensed. You only pay X's own pay-per-use API fees, about $1–2/month for typical use.</p></div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>
+      <a href="https://github.com/GMAn0n/Muse-X-Skill">GitHub</a>
+      <a href="https://muse.ai/s/x-skill-for-muse-pv6c1xts59xqv">Download page</a>
+      <a href="https://console.x.com">X Developer Console</a>
+    </p>
+    <p style="margin-top:12px">X Skill for Muse · Free &amp; MIT licensed · Built for Muse</p>
+  </div>
+</footer>
+</body>
+</html>
